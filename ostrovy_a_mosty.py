@@ -32,6 +32,14 @@ islands = []
 def changer(e):
     global water, coins, text
     click = canvas.find_overlapping(e.x,e.y,e.x+1,e.y+1)
+    if (len(click) != 0 and click[0] in islands):
+        nx = e.x // pw *pw
+        ny = e.y // ph * ph
+        if status_field == True:
+            water.append(canvas.create_image(nx, ny, image=img, anchor=tk.NW))
+            coins -= 30
+            canvas.delete(click[0])
+            islands.remove(click[0])
     if (len(click) != 0 and click[0] in water): # len(click) != 0 -> ci som klikol na obrazok
         nx = e.x // pw *pw
         ny = e.y // ph * ph
@@ -43,14 +51,6 @@ def changer(e):
         if field_status == False:
             islands.append(canvas.create_image(nx, ny, image=img1, anchor=tk.NW))
             coins += 50
-    if (len(click) != 0 and click[0] in islands):
-        nx = e.x // pw *pw
-        ny = e.y // ph * ph
-        canvas.delete(click[0])
-        islands.remove(click[0])
-        if status_field == True:
-            water.append(canvas.create_image(nx, ny, image=img, anchor=tk.NW))
-            coins -= 30
     canvas.itemconfig(text, text=str(coins))
 
 def spinner(e):
@@ -88,6 +88,7 @@ def switcher(e):
     if image == "pyimage7":
         canvas.itemconfig(click[0], image=img4)
         field_status = True
+        status_field = False
 
 set_up()
 text = canvas.create_text(count_w * pw + 25, 25, text=str(coins), font="arial100")
